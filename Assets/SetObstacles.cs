@@ -4,13 +4,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using System.Linq;
 using Oculus.Interaction;
+using UnityEngine.SceneManagement;
 
 
 public class SetObstacles : MonoBehaviour
 {
     public float s_time;
     public GameObject Sphere;
-    public GameObject Player;
+    public GameObject Sphere2;
     public GameObject Cube;
     public GameObject Walls;
     public GameObject Camera_rig;
@@ -20,6 +21,10 @@ public class SetObstacles : MonoBehaviour
     private Vector3 vector2;
     private int details_count;
     private bool two_dots;
+    public bool CanSave;
+
+    private float x;
+    private float z;
 
     void Start()
     {
@@ -60,9 +65,11 @@ public class SetObstacles : MonoBehaviour
             }
             s_time = 0;
         }
-        if (OVRInput.GetUp(OVRInput.Button.Two))
+        if (OVRInput.GetUp(OVRInput.Button.Two) && CanSave)
         {
             SaveScenee();
+            print("save");
+            SceneManager.LoadScene("Start");
         }
         if (OVRInput.GetUp(OVRInput.Button.Four))
         {
@@ -75,7 +82,7 @@ public class SetObstacles : MonoBehaviour
         var scale = new Vector3 (Mathf.Abs(vector2.x - vector1.x), Mathf.Abs(vector2.y - vector1.y), Mathf.Abs(vector2.z - vector1.z));
         var clone = Instantiate(Cube,position,Quaternion.identity);
         clone.transform.localScale = scale;
-        detailsData.Add(new float[] { clone.transform.position.x, clone.transform.position.y, clone.transform.position.z, clone.transform.localScale.x, clone.transform.localScale.y, clone.transform.localScale.z});
+        detailsData.Add(new float[] { clone.transform.position.x, clone.transform.position.y, clone.transform.position.z, clone.transform.localScale.x, clone.transform.localScale.y, clone.transform.localScale.z,0,0,0});
     }
     void SetRoom()
     {
@@ -83,17 +90,23 @@ public class SetObstacles : MonoBehaviour
         var S = new Vector3(Mathf.Abs(vector2.x - vector1.x) , 25, Mathf.Abs(vector2.z - vector1.z));
         var clone = Instantiate(Walls, position, Quaternion.identity);
         clone.transform.localScale = S;
-        detailsData.Add(new float[] { clone.transform.position.x, clone.transform.position.y, clone.transform.position.z, clone.transform.localScale.x, clone.transform.localScale.y, clone.transform.localScale.z });
+        
+        if (clone.transform.localScale.x > clone.transform.localScale.z)
+        { 
+            z = clone.transform.position.z;
+            x = clone.transform.position.x + clone.transform.localScale.x / 2f;
+        }
+        else
+        {
+            z = clone.transform.position.z + clone.transform.localScale.z / 2f;
+            x = clone.transform.position.x;
+        }
+        detailsData.Add(new float[] { clone.transform.position.x, clone.transform.position.y, clone.transform.position.z, clone.transform.localScale.x, clone.transform.localScale.y, clone.transform.localScale.z, x + clone.transform.localScale.x ,0, z + clone.transform.localScale.z });
+        Instantiate(Sphere2,new Vector3(x,0,z),Quaternion.identity);
 
     }
     void SaveScenee()
     {
-        var playerPos = Player.transform.position;
-        foreach (var item in detailsData)
-        {
-            item[0] -= playerPos.x;
-            item[2] -= playerPos.z;
-        }
         gameObject.GetComponent<SaveLoadManager>().SaveScene();
     }
 }
