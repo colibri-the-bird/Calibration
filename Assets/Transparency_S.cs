@@ -18,7 +18,7 @@ public class Transparency_S : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        players = GameObject.FindGameObjectsWithTag("OVRCamera");
+        players = GameObject.FindGameObjectsWithTag("MainCamera");
         Color oldColor = mat.color;
         if (players.Length > player_count) 
         {
@@ -27,7 +27,7 @@ public class Transparency_S : MonoBehaviour
         }
         for (int i = 0; i < trans.Length; i++)
         {
-            trans[i] = 1 - Vector3.Distance(transform.position, players[i].transform.position)/4;
+            trans[i] = 1 - Vector3.Distance(transform.position, players[i].transform.position)/2;
             if (trans[i] > 1)
             {
                 trans[i] = 1;
