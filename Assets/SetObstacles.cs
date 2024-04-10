@@ -80,7 +80,7 @@ public class SetObstacles : MonoBehaviour
     void SetRoom()
     {
         var position = new Vector3(vector1.x + (vector2.x - vector1.x) / 2f, 0,vector1.z + (vector2.z - vector1.z) / 2f);
-        var S = new Vector3 (Mathf.Abs(vector2.x - vector1.x), 25, Mathf.Abs(vector2.x - vector1.x));
+        var S = new Vector3(Mathf.Abs(vector2.x - vector1.x) , 25, Mathf.Abs(vector2.z - vector1.z));
         var clone = Instantiate(Walls, position, Quaternion.identity);
         clone.transform.localScale = S;
         detailsData.Add(new float[] { clone.transform.position.x, clone.transform.position.y, clone.transform.position.z, clone.transform.localScale.x, clone.transform.localScale.y, clone.transform.localScale.z });
