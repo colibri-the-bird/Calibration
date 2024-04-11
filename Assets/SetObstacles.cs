@@ -25,6 +25,8 @@ public class SetObstacles : MonoBehaviour
 
     private float x;
     private float z;
+    private float delta_x;
+    private float delta_z;
 
     void Start()
     {
@@ -37,7 +39,10 @@ public class SetObstacles : MonoBehaviour
         {
             s_time += Time.deltaTime;
         }
-
+        if (OVRInput.Get(OVRInput.Button.Three))
+        {
+            SceneManager.LoadScene("Main");
+        }
         if (OVRInput.GetUp(OVRInput.Button.One))
         {
             if (s_time >= 1)
@@ -95,13 +100,17 @@ public class SetObstacles : MonoBehaviour
         { 
             z = clone.transform.position.z;
             x = clone.transform.position.x + clone.transform.localScale.x / 2f;
+            delta_z = clone.transform.position.z;
+            delta_x = clone.transform.position.x - clone.transform.localScale.x / 2f;
         }
         else
         {
             z = clone.transform.position.z + clone.transform.localScale.z / 2f;
             x = clone.transform.position.x;
+            delta_z = clone.transform.position.z - clone.transform.localScale.z / 2f;
+            delta_x = clone.transform.position.x;
         }
-        detailsData.Add(new float[] { clone.transform.position.x, clone.transform.position.y, clone.transform.position.z, clone.transform.localScale.x, clone.transform.localScale.y, clone.transform.localScale.z, x + clone.transform.localScale.x ,0, z + clone.transform.localScale.z });
+        detailsData.Add(new float[] { clone.transform.position.x, clone.transform.position.y, clone.transform.position.z, clone.transform.localScale.x, clone.transform.localScale.y, clone.transform.localScale.z, delta_x - x, 0, delta_z - z});
         Instantiate(Sphere2,new Vector3(x,0,z),Quaternion.identity);
 
     }
