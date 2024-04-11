@@ -34,12 +34,14 @@ public class BrigePart : MonoBehaviour
     {
         if (other.gameObject.GetComponent<Fall_Script>() != null)
         {
+            other.gameObject.GetComponent<Fall_Script>().Y = other.transform.position.y;
             other.gameObject.GetComponent<Fall_Script>().fall = true;
         }
     }
     private IEnumerator Coroutine(Collider collider)
     {
         yield return new WaitForSeconds(0.1f);
+        collider.gameObject.GetComponent<Fall_Script>().Y = collider.transform.position.y;
         collider.gameObject.GetComponent<Fall_Script>().fall = true;
         Destroy(gameObject);
     }

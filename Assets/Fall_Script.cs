@@ -8,7 +8,10 @@ public class Fall_Script : MonoBehaviour
     private float stay;
     public GameObject PlayerCon;
     public Transform FloorLevel;
-    private Rigidbody rb;
+    public Rigidbody rb;
+    public bool GhostForm;
+    public float Y;
+    public int HP = 3;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,7 +23,7 @@ public class Fall_Script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (fall&&(transform.position.y <= stay))
+        if (fall&&(transform.position.y <= stay)&&!GhostForm)
         {
             rb.isKinematic = false;
         }
